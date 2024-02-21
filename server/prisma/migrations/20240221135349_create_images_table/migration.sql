@@ -1,0 +1,9 @@
+-- CreateTable
+CREATE TABLE "Image" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "path" TEXT NOT NULL,
+    "orphanageId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Image_orphanageId_fkey" FOREIGN KEY ("orphanageId") REFERENCES "Orphanage" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
