@@ -1,13 +1,13 @@
 "use client";
-import { Map as MapContainer, Point } from 'pigeon-maps';
 
-const position = [-23.4668839, -46.5924590] as Point;
+import { Map as MapContainer, MapProps } from 'pigeon-maps';
 
-export function Map() {
+export function Map(props: MapProps) {
   return (
     <MapContainer
-      center={position}
-      zoom={15}
+      defaultCenter={[-23.4667111, -46.5923237]}
+      defaultZoom={15}
+      {...props}
     />
   );
 }
