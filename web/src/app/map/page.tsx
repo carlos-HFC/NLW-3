@@ -3,8 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Map } from "@/components/map";
+import { Marker } from "@/components/marker";
 
-export default function MapPage() {
+import { api } from "@/services/api";
+
+export default async function MapPage() {
+  const response = await api.get<Orphanage[]>("/orphanages", {
+    next: {
+      tags: ['orphanages-list'],
+      revalidate: 120
+    }
+  });
+
   return (
     <div className="w-full h-dvh flex relative">
       <aside className="w-[440px] bg-blue-gradient p-20 flex flex-col justify-between">
@@ -26,10 +36,19 @@ export default function MapPage() {
         </footer>
       </aside>
 
-      <Map />
+      <Map>
+        {response.data.orphanages.map(item => (
+          <Marker
+            key={item.id}
+            payload={item.name}
+            href={`/orphanages/${item.id}`}
+            anchor={[Number(item.latitude), Number(item.longitude)]}
+          />
+        ))}
+      </Map>
 
       <Link
-        href="/"
+        href="/orphanages"
         className="absolute right-10 bottom-10 size-16 rounded-2xl bg-blue-500 hover:bg-blue-400 flex justify-center items-center transition-colors duration-200"
       >
         <PlusIcon />
