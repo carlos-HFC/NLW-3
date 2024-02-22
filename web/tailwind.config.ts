@@ -11,7 +11,10 @@ const config: Config = {
     extend: {
       backgroundImage: {
         "blue-gradient": "linear-gradient(329.54deg, #29b6d1, #00c7c7)",
-        landing: "url(/landing.svg)"
+        landing: "url(/landing.svg)",
+        "hour-gradient": "linear-gradient(149.97deg, #E6F7FB 8.13%, #FFFFFF 92.67%)",
+        "open-weekend-gradient": "linear-gradient(154.16deg, #EDFFF6 7.85%, #FFFFFF 91.03%);",
+        "close-weekend-gradient": "linear-gradient(154.16deg, #FDF0F5 7.85%, #FFFFFF 91.03%);",
       },
       fontFamily: {
         sans: [
@@ -21,20 +24,26 @@ const config: Config = {
       },
       colors: {
         blue: {
+          600: "#0089a5",
+          550: "#12AFCB",
           500: "#15C3D6",
           400: "#17D6EB",
           300: "#96feff",
-          100: "#D1EDF2"
+          200: "#B3DAE2",
+          100: "#D1EDF2",
+          50: "#E6F7FB"
         },
         yellow: {
           500: "#FFD666"
         },
         green: {
           500: "#37C77F",
+          200: "#A1E9C5",
           100: "#EDFFF6"
         },
         red: {
           500: "#FF669D",
+          200: "#FFBCD4",
           100: "#FFE4EE"
         },
         gold: {
