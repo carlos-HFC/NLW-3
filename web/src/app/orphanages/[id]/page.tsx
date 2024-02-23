@@ -1,4 +1,5 @@
 import { ClockIcon, InfoIcon } from "lucide-react";
+import { Metadata, ResolvingMetadata } from "next";
 
 import { Gallery } from "@/components/gallery";
 import { Map } from "@/components/map";
@@ -13,8 +14,29 @@ interface PageProps {
   };
 }
 
+export async function generateMetadata({ params }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
+  const { data: { orphanage } } = await api.get<Orphanage, 'orphanage'>(`/orphanages/${params.id}`);
+
+  const images = (await parent).openGraph?.images ?? orphanage.images;
+
+  return {
+    title: orphanage.name,
+    openGraph: {
+      images
+    }
+  };
+}
+
+export async function generateStaticParams() {
+  const { data } = await api.get<Orphanage[], 'orphanages'>(`/orphanages`);
+
+  return data.orphanages.map(item => ({
+    id: item.id
+  }));
+}
+
 export default async function OrphanagesDetailPage(props: PageProps) {
-  const response = await api.get<Orphanage>(`/orphanages/${props.params.id}`);
+  const response = await api.get<Orphanage, 'orphanage'>(`/orphanages/${props.params.id}`);
 
   const { orphanage } = response.data;
 
@@ -50,10 +72,10 @@ export default async function OrphanagesDetailPage(props: PageProps) {
 
               <footer className="py-5 px-0 text-center">
                 <a
-                  href={`https://www.google.com/maps/@${orphanage.latitude},${orphanage.longitude},15z?entry=ttu`}
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${orphanage.latitude},${orphanage.longitude}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="leading-6 text-munsell-500 no-underline font-semibold"
+                  className="leading-6 text-munsell-500 no-underline font-bold"
                 >
                   Ver rotas no Google Maps
                 </a>
