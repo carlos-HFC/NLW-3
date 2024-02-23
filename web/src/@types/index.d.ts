@@ -7,6 +7,8 @@ type Orphanage = {
   openOnWeekends: boolean;
   latitude: string;
   longitude: string;
+  createdAt: Date;
+  updatedAt: Date;
   images: Image[];
 };
 
