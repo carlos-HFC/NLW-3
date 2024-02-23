@@ -23,7 +23,8 @@ app.setErrorHandler((error, request, reply) => {
     let message: ValidationErros = {};
 
     error.issues.forEach(err => {
-      (message[err.path as never] as unknown as string) = err.message;
+      const path = err.path.length <= 0 ? 'images' : err.path as never;
+      (message[path] as unknown as string) = err.message;
     });
 
     return reply.status(400).send({
