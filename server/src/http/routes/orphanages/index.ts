@@ -49,13 +49,13 @@ export async function orphanagesRoutes(fastify: FastifyInstance) {
     { preHandler: config.array("images") },
     async (request) => {
       const orphanageBodySchema = z.object({
-        name: z.string(),
-        latitude: z.coerce.number(),
-        longitude: z.coerce.number(),
-        about: z.string(),
-        instructions: z.string(),
-        openingHours: z.string(),
-        openOnWeekends: z.coerce.boolean().optional().default(false),
+        name: z.string().min(1),
+        latitude: z.coerce.number().refine(n => n !== 0),
+        longitude: z.coerce.number().refine(n => n !== 0),
+        about: z.string().min(1),
+        instructions: z.string().min(1),
+        openingHours: z.string().min(1),
+        openOnWeekends: z.coerce.string().catch('false').transform(v => v === 'true').optional().default('false'),
       });
 
       const imageSchema = z.array(
@@ -66,14 +66,14 @@ export async function orphanagesRoutes(fastify: FastifyInstance) {
           filename: z.string(),
           path: z.string(),
           mimetype: z.enum(["image/jpeg", "image/jpg", "image/png", "image/webp"], {
-            errorMap: () => ({ message: "Invalid file type." })
+            errorMap: () => ({ message: "Invalid file type." }),
           }),
         }), { required_error: "Images are required to create orphanage." }
-      );
+      ).min(1).max(6);
 
       const files = imageSchema.parse(request.files);
 
-      const { about, instructions, latitude, longitude, name, openOnWeekends, openingHours, } = orphanageBodySchema.parse(request.body);
+      const { about, instructions, latitude, longitude, name, openOnWeekends, openingHours } = orphanageBodySchema.parse(request.body);
 
       const orphanage = await prisma.orphanage.create({
         data: {
