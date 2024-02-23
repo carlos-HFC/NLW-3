@@ -37,7 +37,9 @@ const config: Config = {
           500: "#FFD666"
         },
         green: {
+          600: "#31B272",
           500: "#37C77F",
+          400: "#3BD689",
           200: "#A1E9C5",
           100: "#EDFFF6"
         },
@@ -61,6 +63,10 @@ const config: Config = {
         },
         munsell: {
           500: "#0089A5",
+        },
+        eucalyptus: {
+          550: "#36CF82",
+          500: "#3CDC8C",
         }
       }
     },
