@@ -8,8 +8,12 @@ import "./globals.css";
 const nunito = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Happy",
+  title: {
+    default: "Happy",
+    template: "%s | Happy"
+  },
   description: "Leve felicidade para o mundo",
+  metadataBase: new URL("http://localhost:3000")
 };
 
 export default function RootLayout({

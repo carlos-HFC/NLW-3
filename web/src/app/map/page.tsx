@@ -8,10 +8,10 @@ import { Marker } from "@/components/marker";
 import { api } from "@/services/api";
 
 export default async function MapPage() {
-  const response = await api.get<Orphanage[]>("/orphanages", {
+  const response = await api.get<Orphanage[], 'orphanages'>("/orphanages", {
+    cache: "no-store",
     next: {
       tags: ['orphanages-list'],
-      revalidate: 120
     }
   });
 
