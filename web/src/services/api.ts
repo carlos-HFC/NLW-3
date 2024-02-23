@@ -1,18 +1,18 @@
 import { env } from "@/env/env";
 
-async function get<T>(url: string, init?: RequestInit) {
+async function get<T, K extends string>(url: string, init?: RequestInit) {
   const response = await fetch(`${env.NEXT_API_URL}${url}`, init);
 
-  const data = await response.json() as { [key: string]: T; };
+  const data = await response.json() as { [P in K]: T; };
 
   return { data };
 }
 
-async function post(url: string, data: object, init?: RequestInit) {
+async function post(url: string, data: BodyInit, init?: RequestInit) {
   return await fetch(`${env.NEXT_API_URL}${url}`, {
     ...init,
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
   });
 }
 
