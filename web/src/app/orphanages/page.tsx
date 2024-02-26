@@ -215,7 +215,7 @@ export default function OrphanagesPage() {
             />
 
             <FormControl
-              label="Opening Hours"
+              label="Horário das visitas"
               name="openingHours"
               value={data.openingHours}
               onChange={handleChange}
