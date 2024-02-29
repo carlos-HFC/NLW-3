@@ -32,8 +32,10 @@ export function SelectMapPosition() {
     <View style={styles.container}>
       <MapView
         initialRegion={DEFAULT_POSITION}
+        rotateEnabled={false}
         onPress={handleSelectMapPosition}
         style={styles.mapStyle}
+        zoomControlEnabled
       >
         {position.latitude !== 0 && (
           <Marker

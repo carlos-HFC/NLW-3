@@ -64,5 +64,14 @@ export const styles = StyleSheet.create({
     fontFamily: THEME.FONT_FAMILY.EXTRA,
     fontSize: THEME.SIZES.BASE,
     color: THEME.COLORS.WHITE,
-  }
+  },
+  uploadedImagesContainer: {
+    gap: 8
+  },
+  uploadedImage: {
+    width: 64,
+    height: 64,
+    borderRadius: 20,
+    marginBottom: 32,
+  },
 });
