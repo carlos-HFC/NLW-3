@@ -5,13 +5,9 @@ import { THEME } from "@/styles/theme";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  mapContainer: {
-    flex: 1,
     position: "relative"
   },
   map: {
-    flex: 1,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
