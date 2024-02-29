@@ -8,6 +8,8 @@ export const THEME = {
     PRIMARY_50: "#E6F7FB",
 
     RED_500: "#FF669D",
+    RED_200: "#FFBCD4",
+    RED_100: "#FEF6F9",
 
     GRAY_500: "#8FA7B3",
     GRAY_300: "#CCCCCC",
