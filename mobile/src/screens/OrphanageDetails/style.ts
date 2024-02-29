@@ -1,5 +1,6 @@
-import { THEME } from "@/styles/theme";
 import { Dimensions, StyleSheet } from "react-native";
+
+import { THEME } from "@/styles/theme";
 
 export const styles = StyleSheet.create({
   container: {
@@ -29,14 +30,13 @@ export const styles = StyleSheet.create({
   },
   mapContainer: {
     borderRadius: 20,
-    overflow: 'hidden',
     borderWidth: 1.2,
     borderColor: THEME.COLORS.PRIMARY_200,
     marginTop: 40,
     backgroundColor: THEME.COLORS.PRIMARY_50,
   },
   mapStyle: {
-    width: '100%',
+    width: "100%",
     height: 150,
   },
   routesContainer: {
@@ -58,34 +58,6 @@ export const styles = StyleSheet.create({
     marginTop: 24,
     flexDirection: 'row',
     justifyContent: 'space-between'
-  },
-  scheduleItem: {
-    width: '48%',
-    padding: 20,
-  },
-  scheduleItemBlue: {
-    backgroundColor: THEME.COLORS.PRIMARY_50,
-    borderWidth: 1,
-    borderColor: THEME.COLORS.PRIMARY_200,
-    borderRadius: 20,
-  },
-  scheduleItemGreen: {
-    backgroundColor: THEME.COLORS.GREEN_100,
-    borderWidth: 1,
-    borderColor: THEME.COLORS.GREEN_200,
-    borderRadius: 20,
-  },
-  scheduleText: {
-    fontFamily: THEME.FONT_FAMILY.SEMI,
-    fontSize: THEME.SIZES.BASE,
-    lineHeight: 24,
-    marginTop: 20,
-  },
-  scheduleTextBlue: {
-    color: THEME.COLORS.TEAL_400
-  },
-  scheduleTextGreen: {
-    color: THEME.COLORS.GREEN_500
   },
   contactButton: {
     backgroundColor: THEME.COLORS.GREEN_600,
