@@ -3,6 +3,7 @@ import z from "zod";
 
 import { GlobalError } from "@/core/global-error";
 import { User } from "@/domain/entities/user";
+import { env } from "@/env/env";
 import { bcryptHasher } from "@/http/helpers/bcrypt-hasher";
 
 export async function authRoutes(app: FastifyInstance) {
@@ -15,8 +16,9 @@ export async function authRoutes(app: FastifyInstance) {
     const { email, password } = handleLoginBody.parse(request.body);
 
     const user = await User.findUserByEmail(email);
+    const comparePassword = user && await bcryptHasher.hashComparer(password, user.password);
 
-    if (!user) {
+    if (!user || !comparePassword) {
       return GlobalError(reply, {
         statusCode: 400,
         error: "Bad Request",
@@ -24,23 +26,17 @@ export async function authRoutes(app: FastifyInstance) {
       });
     }
 
-    const comparePassword = await bcryptHasher.hashComparer(password, user.password);
-
-    if (!comparePassword) {
-      return GlobalError(reply, {
-        statusCode: 400,
-        error: "Bad Request",
-        message: "Incorrect credentials."
-      });
-    }
-
-    const token = app.jwt.sign({
+    const token = await reply.jwtSign({
       superUser: user.superUser
     }, {
       sub: user.id,
-      expiresIn: "7d"
+      expiresIn: env.EXPIRES_TOKEN
     });
 
-    return { token };
+    reply.setCookie(env.COOKIE_NAME, token);
+  });
+
+  app.delete("/logout", async (request, reply) => {
+    reply.clearCookie(env.COOKIE_NAME);
   });
 }

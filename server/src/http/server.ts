@@ -1,3 +1,4 @@
+import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 import fastifyJwt from "@fastify/jwt";
 import fastifyStatic from "@fastify/static";
@@ -37,12 +38,28 @@ app.setErrorHandler((error, request, reply) => {
     });
   }
 
+  console.log(error);
+
   return reply.send(error);
 });
 
 app.register(fastifyCors);
 app.register(fastifyJwt, {
-  secret: env.JWT_SECRET
+  secret: env.JWT_SECRET,
+  cookie: {
+    cookieName: env.COOKIE_NAME,
+    signed: false
+  }
+});
+app.register(fastifyCookie, {
+  hook: 'onRequest',
+  secret: env.COOKIE_SECRET,
+  parseOptions: {
+    maxAge: env.EXPIRES_TOKEN,
+    path: '/',
+    httpOnly: true,
+    secure: true,
+  },
 });
 app.register(fastifyStatic, {
   root: path.join(__dirname, '..', '..', 'uploads'),
