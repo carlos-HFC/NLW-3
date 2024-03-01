@@ -16,6 +16,8 @@ model Orphanage {
   instructions   String
   openingHours   String
   openOnWeekends Boolean  @default(false)
+  aproved        Boolean  @default(false)
+  whatsapp       String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @default(now()) @updatedAt
 
@@ -30,4 +32,12 @@ model Image {
   updatedAt   DateTime @default(now()) @updatedAt
 
   orphanage Orphanage @relation(fields: [orphanageId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model User {
+  id        String  @id @default(uuid())
+  superUser Boolean @default(false)
+  name      String
+  email     String  @unique
+  password  String
 }
