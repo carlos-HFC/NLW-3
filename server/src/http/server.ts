@@ -1,4 +1,5 @@
 import fastifyCors from "@fastify/cors";
+import fastifyJwt from "@fastify/jwt";
 import fastifyStatic from "@fastify/static";
 import fastify from 'fastify';
 import multer from 'fastify-multer';
@@ -8,7 +9,9 @@ import { ZodError } from "zod";
 import { env } from "@/env/env";
 import { deleteFiles } from "@/http/helpers";
 
+import { authRoutes } from "./routes/auth";
 import { orphanagesRoutes } from "./routes/orphanages";
+import { usersRoutes } from "./routes/users";
 
 interface ValidationErros {
   [key: string]: string;
@@ -38,16 +41,22 @@ app.setErrorHandler((error, request, reply) => {
 });
 
 app.register(fastifyCors);
-
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET
+});
 app.register(fastifyStatic, {
   root: path.join(__dirname, '..', '..', 'uploads'),
   prefix: '/uploads'
 });
-
 app.register(multer.contentParser);
 
+app.register(authRoutes, { prefix: "/auth" });
 app.register(orphanagesRoutes, { prefix: "/orphanages" });
+app.register(usersRoutes, { prefix: "/users" });
 
 app
-  .listen({ port: env.PORT })
+  .listen({
+    port: env.PORT,
+    host: "0.0.0.0"
+  })
   .then(() => console.log(`HTTP Server running in http://localhost:${env.PORT}`));
