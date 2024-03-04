@@ -9,7 +9,9 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL
+    "password" TEXT NOT NULL,
+    "superUser" BOOLEAN NOT NULL DEFAULT false,
+    "tokenResetPassword" TEXT
 );
 
 -- RedefineTables
