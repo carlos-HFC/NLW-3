@@ -8,7 +8,7 @@ import path from "node:path";
 import { ZodError } from "zod";
 
 import { env } from "@/env/env";
-import { deleteFiles } from "@/http/helpers";
+import { deleteFiles } from "@/http/helpers/delete-files";
 
 import { authRoutes } from "./routes/auth";
 import { orphanagesRoutes } from "./routes/orphanages";
@@ -37,8 +37,6 @@ app.setErrorHandler((error, request, reply) => {
       message
     });
   }
-
-  console.log(error);
 
   return reply.send(error);
 });

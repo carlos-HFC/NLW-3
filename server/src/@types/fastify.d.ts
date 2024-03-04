@@ -6,10 +6,6 @@ declare module "fastify" {
     file: Express.Multer.File;
     files: Express.Multer.File[];
   }
-
-  interface FastifyContextConfig {
-    superUser?: boolean;
-  }
 }
 
 declare module "@fastify/jwt" {
