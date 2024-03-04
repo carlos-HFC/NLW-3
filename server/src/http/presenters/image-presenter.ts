@@ -5,7 +5,7 @@ export class ImagePresenter {
     return {
       id: image.id,
       path: image.path,
-      url: `http://localhost:3333/uploads/${image.path}`,
+      url: image.path.startsWith('http') ? image.path : `http://localhost:3333/uploads/${image.path}`,
     };
   }
 
