@@ -5,13 +5,14 @@ import Link from "next/link";
 import { Map } from "@/components/map";
 import { Marker } from "@/components/marker";
 
+import { ORPHANAGES_LIST } from "@/constants/next-tags";
 import { api } from "@/services/api";
 
 export default async function MapPage() {
   const response = await api.get<Orphanage[], 'orphanages'>("/orphanages", {
-    cache: "no-store",
+    cache: "force-cache",
     next: {
-      tags: ['orphanages-list'],
+      tags: [ORPHANAGES_LIST],
     }
   });
 
