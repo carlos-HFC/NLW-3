@@ -1,7 +1,12 @@
+import { headers } from "next/headers";
+
 import { env } from "@/env/env";
 
 async function get<T, K extends string>(url: string, init?: RequestInit) {
-  const response = await fetch(`${env.NEXT_API_URL}${url}`, init);
+  const response = await fetch(`${env.NEXT_API_URL}${url}`, {
+    headers: headers(),
+    ...init
+  });
 
   const data = await response.json() as { [P in K]: T; };
 

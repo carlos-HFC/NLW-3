@@ -26,7 +26,7 @@ export default function Home() {
         </main>
 
         <Link
-          href="/"
+          href="/login"
           className="absolute right-0 top-0 bg-blue-400 hover:bg-blue-300 py-3 px-10 flex items-center justify-center rounded-2xl transition-colors duration-200 font-extrabold text-white hover:text-blue-500 text-xl"
         >
           Acesso restrito
@@ -36,7 +36,7 @@ export default function Home() {
           href="/map"
           className="absolute right-0 bottom-0 size-20 bg-yellow-500 hover:bg-blue-300 flex items-center justify-center rounded-3xl transition-colors duration-200"
         >
-          <ArrowRightIcon className="size-7 text-black/60" />
+          <ArrowRightIcon className="size-8 text-black/60" />
         </Link>
       </div>
     </div>
