@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ZoomControl } from "pigeon-maps";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 
+import { Button } from "@/components/button";
 import { FormControl } from "@/components/form-control";
 import { Map } from "@/components/map";
 import { Marker } from "@/components/marker";
@@ -26,10 +27,6 @@ const INITIAL_STATE_ANCHOR = {
 };
 
 const INITIAL_STATE_FORM = {
-  name: "",
-  about: "",
-  instructions: "",
-  openingHours: "",
   openOnWeekends: true,
   images: [] as File[]
 };
@@ -54,7 +51,7 @@ export default function OrphanagesPage() {
     });
   }
 
-  function handleChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
     setData(prev => {
       if (event.target.name === 'images') {
         if (prev.images.length === 6) return prev;
@@ -70,7 +67,7 @@ export default function OrphanagesPage() {
 
       return {
         ...prev,
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value === 'true'
       };
     });
   }
@@ -140,8 +137,6 @@ export default function OrphanagesPage() {
             <FormControl
               label="Nome"
               name="name"
-              value={data.name}
-              onChange={handleChange}
             />
 
             <FormControl
@@ -150,8 +145,6 @@ export default function OrphanagesPage() {
               as="textarea"
               maxLength={300}
               helpText="Máximo de 300 caracteres"
-              value={data.about}
-              onChange={handleChange}
             />
 
             <div className="mt-6">
@@ -210,15 +203,11 @@ export default function OrphanagesPage() {
               label="Instruções"
               name="instructions"
               as="textarea"
-              value={data.instructions}
-              onChange={handleChange}
             />
 
             <FormControl
               label="Horário das visitas"
               name="openingHours"
-              value={data.openingHours}
-              onChange={handleChange}
             />
 
             <div className="mt-6">
@@ -237,7 +226,7 @@ export default function OrphanagesPage() {
                     className={cn("appearance-none absolute inset-0 cursor-pointer")}
                     value="true"
                     checked={data.openOnWeekends}
-                    onChange={() => setData(prev => ({ ...prev, openOnWeekends: true }))}
+                    onChange={handleChange}
                   />
                   Sim
                 </div>
@@ -248,7 +237,7 @@ export default function OrphanagesPage() {
                     className={cn("appearance-none absolute inset-0 cursor-pointer")}
                     value="false"
                     checked={!data.openOnWeekends}
-                    onChange={() => setData(prev => ({ ...prev, openOnWeekends: false }))}
+                    onChange={handleChange}
                   />
                   Não
                 </div>
@@ -256,12 +245,12 @@ export default function OrphanagesPage() {
             </div>
           </fieldset>
 
-          <button
+          <Button
             type="submit"
-            className="mt-16 w-full h-16 border-none cursor-pointer bg-eucalyptus-500 hover:bg-eucalyptus-550 rounded-2xl text-white font-extrabold flex justify-center items-center"
+            className="mt-16"
           >
             Confirmar
-          </button>
+          </Button>
         </form>
       </main>
 
