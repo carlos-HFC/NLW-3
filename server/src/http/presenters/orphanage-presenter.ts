@@ -3,14 +3,14 @@ import { Image, Orphanage } from "@prisma/client";
 import { ImagePresenter } from "./image-presenter";
 
 type OrphanagePresenterProps = Orphanage & {
-  images: Image[];
+  images?: Image[];
 };
 
 export class OrphanagePresenter {
   static render(orphanage: OrphanagePresenterProps) {
     return {
       ...orphanage,
-      images: ImagePresenter.renderMany(orphanage.images)
+      images: orphanage.images ? ImagePresenter.renderMany(orphanage?.images) : undefined
     };
   }
 
