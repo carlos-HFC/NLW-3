@@ -89,24 +89,14 @@ async function main() {
     }),
   ]);
 
-  await Promise.all([
-    prisma.user.create({
-      data: {
-        email: "admin@email.com",
-        name: "Admin",
-        password: "$2b$10$cC5pYoa6Ne.Myx0KootR9ejBsbGm.DJEAkadn3T6tYuFjgnJ1AicK",
-        superUser: true
-      }
-    }),
-    prisma.user.create({
-      data: {
-        email: "renato@email.com",
-        name: "Renato",
-        password: "$2y$10$JPhff2a21JMxbbRqXFkEKORUx4U0oHq0pUdi7GQYDhyTf3LSFM1SS",
-        superUser: false
-      }
-    }),
-  ]);
+  await prisma.user.create({
+    data: {
+      email: "chfcchfc96@gmail.com",
+      name: "Carlos",
+      password: "$2b$10$cC5pYoa6Ne.Myx0KootR9ejBsbGm.DJEAkadn3T6tYuFjgnJ1AicK",
+      superUser: true
+    }
+  });
 }
 
 main();
