@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import z from "zod";
 
+import { GlobalError } from "@/core/global-error";
 import { OrphanagePresenter } from "@/http/presenters/orphanage-presenter";
 import { config } from "@/http/storage/multer";
 import { prisma } from "@/lib/prisma";
@@ -9,9 +10,6 @@ import { authenticate } from "@/plugins/authenticate";
 export async function orphanagesRoutes(fastify: FastifyInstance) {
   fastify.get("/", async () => {
     const orphanages = await prisma.orphanage.findMany({
-      include: {
-        images: true
-      },
       where: {
         aproved: true
       }
@@ -39,8 +37,10 @@ export async function orphanagesRoutes(fastify: FastifyInstance) {
     });
 
     if (!orphanage) {
-      return reply.status(404).send({
-        message: "Orphanage not found."
+      return GlobalError(reply, {
+        error: "Not Found",
+        message: "Orphanage not found.",
+        statusCode: 404
       });
     }
 
@@ -156,7 +156,6 @@ export async function orphanagesRoutes(fastify: FastifyInstance) {
   fastify.patch("/:id",
     {
       onRequest: [authenticate],
-      // preHandler: config.array('images')
     },
     async (request, reply) => {
       const orphanageParamSchema = z.object({
@@ -172,49 +171,131 @@ export async function orphanagesRoutes(fastify: FastifyInstance) {
         about: z.string().min(1).optional(),
         instructions: z.string().min(1).optional(),
         openingHours: z.string().min(1).optional(),
-        openOnWeekends: z.coerce.string().catch('false').transform(v => v === 'true').optional(),
+        openOnWeekends: z.coerce.boolean().optional(),
         whatsapp: z.string().min(10).optional(),
-        aproved: z.coerce.string().catch('false').transform(v => v === 'true').optional(),
       });
 
-      const {
-        about,
-        aproved,
-        instructions,
-        latitude,
-        longitude,
-        name,
-        openOnWeekends,
-        openingHours,
-        whatsapp
-      } = orphanageBodySchema.parse(request.body);
+      const orphanage = await prisma.orphanage.findUnique({
+        where: {
+          id
+        },
+      });
 
-      // const imageSchema = z.array(
-      //   z.object({
-      //     fieldname: z.enum(["images"]),
-      //     originalname: z.string(),
-      //     destination: z.string(),
-      //     filename: z.string(),
-      //     path: z.string(),
-      //     mimetype: z.enum(["image/jpeg", "image/jpg", "image/png", "image/webp"], {
-      //       errorMap: () => ({ message: "Invalid file type." }),
-      //     }),
-      //   }), { required_error: "Images are required to create orphanage." }
-      // ).min(1).max(5);
+      if (!orphanage) {
+        return GlobalError(reply, {
+          error: "Not Found",
+          message: "Orphanage not found.",
+          statusCode: 404
+        });
+      }
 
-      // const files = imageSchema.parse(request.files);
+      const data = orphanageBodySchema.parse(request.body);
 
-      const orphanage = await prisma.orphanage.update({
+      await prisma.orphanage.update({
+        where: {
+          id
+        },
+        data
+      });
+
+      reply.code(200).send();
+    }
+  );
+
+  fastify.patch('/aproved/:id',
+    {
+      onRequest: [authenticate]
+    },
+    async (request, reply) => {
+      const orphanageParamSchema = z.object({
+        id: z.string()
+      });
+
+      const { id } = orphanageParamSchema.parse(request.params);
+
+      const orphanage = await prisma.orphanage.findUnique({
+        where: {
+          id
+        }
+      });
+
+      if (!orphanage) {
+        return GlobalError(reply, {
+          error: "Not Found",
+          message: "Orphanage not found.",
+          statusCode: 404
+        });
+      }
+
+      const orphanageBodySchema = z.object({
+        aproved: z.coerce.boolean()
+      });
+
+      const { aproved } = orphanageBodySchema.parse(request.body);
+
+      if (!aproved) {
+        await prisma.orphanage.delete({
+          where: {
+            id
+          }
+        });
+
+        reply.code(204).send();
+      }
+
+      await prisma.orphanage.update({
         where: {
           id
         },
         data: {
           aproved
-          // ...orphanageBodySchema.parse(request.body)
         }
       });
 
-      return orphanage;
+      reply.code(200).send();
+    }
+  );
+
+  fastify.delete("/:id",
+    {
+      onRequest: [authenticate]
+    },
+    async (request, reply) => {
+      const orphanageParamSchema = z.object({
+        id: z.string()
+      });
+
+      const { id } = orphanageParamSchema.parse(request.params);
+
+      const orphanage = await prisma.orphanage.findUnique({
+        where: {
+          id
+        }
+      });
+
+      if (!orphanage) {
+        return GlobalError(reply, {
+          error: "Not Found",
+          message: "Orphanage not found.",
+          statusCode: 404
+        });
+      }
+
+      if (!orphanage.aproved) {
+        return GlobalError(reply, {
+          error: "Bad Request",
+          message: "You cannot delete not aproved orphanage.",
+          statusCode: 400
+        });
+      }
+
+      await prisma.orphanage.delete({
+        where: {
+          id
+        }
+      });
+
+      reply.code(204).send();
     }
   );
 }

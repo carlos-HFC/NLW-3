@@ -53,9 +53,9 @@ export async function authRoutes(fastify: FastifyInstance) {
 
     if (!user) {
       return GlobalError(reply, {
-        statusCode: 400,
+        statusCode: 404,
         error: "Bad Request",
-        message: "User not exists."
+        message: "User not found."
       });
     }
 
