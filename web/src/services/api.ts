@@ -21,7 +21,15 @@ async function post(url: string, data: BodyInit, init?: RequestInit) {
   });
 }
 
+async function del(url: string, init?: RequestInit) {
+  return await fetch(`${env.NEXT_API_URL}${url}`, {
+    headers: headers(),
+    ...init
+  });
+}
+
 export const api = {
   get,
-  post
+  post,
+  del
 };
