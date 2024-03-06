@@ -36,16 +36,16 @@ export function Sidebar(props: Readonly<SidebarProps>) {
       {IS_LOGGED && (
         <nav className="space-y-4">
           <NavLink
-            active={!IS_PENDING}
-            href="?aproved=true"
-            replace
+            active={pathname === '/dashboard' && !IS_PENDING}
+            href="/dashboard?aproved=true"
+            replace={pathname === '/dashboard'}
           >
-            <MapPinIcon className={cn("size-6", !IS_PENDING ? "stroke-teal-400" : "stroke-white")} />
+            <MapPinIcon className={cn("size-6", pathname === '/dashboard' && !IS_PENDING ? "stroke-teal-400" : "stroke-white")} />
           </NavLink>
           <NavLink
             active={IS_PENDING}
-            href="?aproved=false"
-            replace
+            href="/dashboard?aproved=false"
+            replace={pathname === '/dashboard'}
           >
             {(!IS_PENDING && Boolean(props?.pending)) && (
               <div className="absolute right-2.5 top-2.5 rounded-full size-3 flex justify-center items-center bg-blue-550 group-hover:bg-blue-400">
