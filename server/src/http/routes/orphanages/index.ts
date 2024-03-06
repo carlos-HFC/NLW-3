@@ -61,7 +61,7 @@ export async function orphanagesRoutes(fastify: FastifyInstance) {
         about: z.string().min(1),
         instructions: z.string().min(1),
         openingHours: z.string().min(1),
-        openOnWeekends: z.coerce.string().catch('false').transform(v => v === 'true').optional().default('false'),
+        openOnWeekends: z.enum(['true', 'false']).transform(v => v === 'true').optional().default('false'),
         whatsapp: z.string().min(10)
       });
 
@@ -130,7 +130,7 @@ export async function orphanagesRoutes(fastify: FastifyInstance) {
     },
     async (request, reply) => {
       const orphanageQuerySchema = z.object({
-        aproved: z.coerce.string().catch('false').transform(v => v === 'true').optional().default('true'),
+        aproved: z.enum(['true', 'false']).transform(v => v === 'true')
       });
 
       const { aproved } = orphanageQuerySchema.parse(request.query);
@@ -241,6 +241,8 @@ export async function orphanagesRoutes(fastify: FastifyInstance) {
         });
 
         reply.code(204).send();
+
+        return;
       }
 
       await prisma.orphanage.update({
