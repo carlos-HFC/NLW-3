@@ -26,8 +26,16 @@ async function del(url: string, init?: RequestInit) {
   });
 }
 
+async function patch(url: string, init?: RequestInit) {
+  return await fetch(`${env.NEXT_API_URL}${url}`, {
+    ...init,
+    method: 'PATCH',
+  });
+}
+
 export const api = {
   get,
   post,
-  del
+  del,
+  patch
 };

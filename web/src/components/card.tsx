@@ -34,7 +34,7 @@ export function Card(props: Readonly<CardProps>) {
           {props.pending
             ? (
               <Link
-                href={""}
+                href={`/dashboard/orphanage/${props.id}`}
                 className="size-12 rounded-2xl bg-gray-100 flex justify-center items-center"
               >
                 <ArrowRightIcon className="size-6 stroke-blue-500" />
@@ -47,11 +47,18 @@ export function Card(props: Readonly<CardProps>) {
                 >
                   <PenLineIcon className="size-6 stroke-blue-500" />
                 </Link>
-                <button
+                <Link
                   className="size-12 rounded-2xl bg-gray-100 flex justify-center items-center"
+                  href={{
+                    query: {
+                      open: true,
+                      name: props.name,
+                      id: props.id,
+                    }
+                  }}
                 >
                   <TrashIcon className="size-6 stroke-blue-500" />
-                </button>
+                </Link>
               </>
             )}
         </div>
