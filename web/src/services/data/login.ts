@@ -15,10 +15,15 @@ export async function handleLogin(data: FormData) {
     },
   });
 
-  const [keyDefault,] = res.headers.getSetCookie().toString().split(';');
-  const [key, value] = keyDefault.split('=');
+  const [cookie, ...rest] = res.headers.getSetCookie().toString().split(';');
+  const [key, value] = cookie.split('=');
+  const [, maxAge] = rest[0].split('=').map(Number);
 
-  cookies().set(key, value);
+  cookies().set(key, value, {
+    httpOnly: true,
+    maxAge,
+    secure: true
+  });
 
   redirect('/dashboard');
 }
