@@ -18,7 +18,7 @@ export default async function Dashboard({ searchParams }: PageProps) {
 
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar pending={pending.length} />
 
       <main className="flex-1 bg-gray-100">
         <div className="my-16 mx-auto max-w-5xl">
