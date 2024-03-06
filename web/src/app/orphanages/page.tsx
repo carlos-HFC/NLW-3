@@ -2,11 +2,11 @@
 
 import { PlusIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { ZoomControl } from "pigeon-maps";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/button";
+import { Confirmation } from "@/components/confirmation";
 import { FormControl } from "@/components/form-control";
 import { Map } from "@/components/map";
 import { Marker } from "@/components/marker";
@@ -254,34 +254,13 @@ export default function OrphanagesPage() {
         </form>
       </main>
 
-      {isSuccessRegister && (
-        <div className="fixed inset-0 bg-green-500">
-          <div className="mx-auto max-w-screen-lg h-dvh flex justify-between items-center gap-28">
-            <div className="text-center flex items-center justify-center flex-col max-w-[400px]">
-              <h2 className="text-7xl font-extrabold leading-[70px]">
-                Ebaaa!
-              </h2>
-              <p className="font-semibold text-2xl leading-8 mt-8">
-                O cadastro deu certo e foi enviado ao administrador para ser aprovado. <br /> Agora é só esperar 🙂
-              </p>
-
-              <Link
-                href="/map"
-                className="bg-green-600 hover:bg-green-400 h-16 flex items-center justify-center rounded-2xl mt-16 px-10 text-white w-max font-extrabold text-lg leading-6"
-              >
-                Voltar para o mapa
-              </Link>
-            </div>
-
-            <Image
-              src="/register.svg"
-              alt=""
-              width={400}
-              height={490}
-            />
-          </div>
-        </div>
-      )}
+      <Confirmation
+        open={isSuccessRegister}
+        variant="success"
+        title="Ebaaa!"
+        btnText="Voltar para o mapa"
+        description={<>O cadastro deu certo e foi enviado ao administrador para ser aprovado. <br /> Agora é só esperar 🙂</>}
+      />
     </div>
   );
 }

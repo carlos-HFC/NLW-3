@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 import { Card } from "@/components/card";
+import { Confirmation } from "@/components/confirmation";
 import { Sidebar } from "@/components/sidebar";
 
 import { listAllOrphanages } from "@/services/data/list-all-orphanages";
-import Link from "next/link";
 
 interface PageProps {
   params: {
@@ -12,6 +12,9 @@ interface PageProps {
   };
   searchParams: {
     aproved?: string;
+    open?: boolean;
+    id?: string;
+    name?: string;
   };
 }
 
@@ -20,11 +23,14 @@ export default async function Dashboard({ searchParams }: PageProps) {
 
   const IS_PENDING = searchParams.aproved === 'false';
 
+  const openConfirmation = searchParams.open;
+  const orphanageName = searchParams.name;
+
   const orphaganes = IS_PENDING ? pending : aproved;
 
   return (
     <div className="flex">
-      <Sidebar pending={pending.length} />
+      <Sidebar pending={pending?.length} />
 
       <main className="flex-1 bg-gray-100">
         <div className="my-16 mx-auto max-w-5xl">
@@ -36,14 +42,14 @@ export default async function Dashboard({ searchParams }: PageProps) {
               }
             </h1>
 
-            {orphaganes.length > 0 && (
+            {orphaganes?.length > 0 && (
               <p className="font-semibold text-gray-500">
                 {orphaganes.length} orfanatos
               </p>
             )}
           </header>
 
-          {orphaganes.length > 0
+          {orphaganes?.length > 0
             ? (
               <div className="mt-10 grid grid-cols-2 gap-8">
                 {orphaganes.map(item => (
@@ -69,32 +75,13 @@ export default async function Dashboard({ searchParams }: PageProps) {
         </div>
       </main>
 
-      <div className="fixed inset-0 bg-red-500">
-        <div className="mx-auto max-w-screen-lg h-dvh flex justify-between items-center gap-28">
-          <div className="text-center flex items-center justify-center flex-col max-w-[400px]">
-            <h2 className="text-7xl font-extrabold leading-[70px]">
-              Excluir!
-            </h2>
-            <p className="font-semibold text-2xl leading-8 mt-8">
-              Você tem certeza que quer <br /> excluir o Orfanato Esperança?
-            </p>
-
-            <Link
-              href="/map"
-              className="bg-red-600 hover:bg-red-550 h-16 flex items-center justify-center rounded-2xl mt-16 px-10 text-white w-max font-extrabold text-lg leading-6"
-            >
-              Excluir orfanato
-            </Link>
-          </div>
-
-          <Image
-            src="/delete.svg"
-            alt=""
-            width={400}
-            height={490}
-          />
-        </div>
-      </div>
+      <Confirmation
+        open={openConfirmation}
+        variant="danger"
+        title="Excluir!"
+        btnText="Excluir orfanato"
+        description={<>Você tem certeza que quer <br /> excluir o {orphanageName}?</>}
+      />
     </div>
   );
 }
