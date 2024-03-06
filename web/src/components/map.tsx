@@ -7,6 +7,7 @@ export function Map(props: MapProps) {
     <MapContainer
       center={[-23.4667111, -46.5923237]}
       {...props}
+      attribution={false}
     />
   );
 }

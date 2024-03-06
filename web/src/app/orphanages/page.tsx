@@ -277,9 +277,8 @@ export default function OrphanagesPage() {
               src="/register.svg"
               alt=""
               width={400}
-              height={290}
+              height={490}
             />
-
           </div>
         </div>
       )}

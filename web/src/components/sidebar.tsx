@@ -25,12 +25,12 @@ export function Sidebar(props: Readonly<SidebarProps>) {
   }
 
   return (
-    <aside className="h-full fixed py-8 px-6 bg-blue-gradient flex flex-col justify-between items-center">
+    <aside className="h-full fixed py-8 px-6 bg-blue-500 flex flex-col justify-between items-center">
       <Image
         src="/map-marker.svg"
         alt="Happy"
-        width={64}
-        height={72}
+        width={48}
+        height={56}
       />
 
       {IS_LOGGED && (
