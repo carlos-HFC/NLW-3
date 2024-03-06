@@ -1,6 +1,8 @@
-import { ClockIcon, InfoIcon } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
+import Image from "next/image";
 
+import { Box } from "@/components/box";
+import { Button } from "@/components/button";
 import { Gallery } from "@/components/gallery";
 import { Map } from "@/components/map";
 import { Marker } from "@/components/marker";
@@ -90,31 +92,37 @@ export default async function OrphanagesDetailPage(props: PageProps) {
             </p>
 
             <div className="mt-6 grid grid-cols-2 gap-5">
-              <div className="py-8 px-6 rounded-2xl leading-7 border border-blue-200 text-teal-400 bg-hour-gradient">
-                <ClockIcon className="block mb-5" />
+              <Box icon="clock">
                 Segunda à sexta <br />
                 {orphanage.openingHours}
-              </div>
+              </Box>
               {orphanage.openOnWeekends
                 ? (
-                  <div className="py-8 px-6 rounded-2xl leading-7 border border-green-200 text-green-500 bg-open-weekend-gradient">
-                    <InfoIcon className="block mb-5" />
+                  <Box icon="info" variant="success">
                     Atendemos <br />
                     fim de semana
-                  </div>
+                  </Box>
                 ) : (
-                  <div className="py-8 px-6 rounded-2xl leading-7 border border-red-200 text-red-500 bg-close-weekend-gradient">
-                    <InfoIcon className="block mb-5" />
+                  <Box icon="info" variant="danger">
                     Não atendemos <br />
                     fim de semana
-                  </div>
+                  </Box>
                 )
               }
             </div>
 
-            <button>
+            <Button
+              variant="whatsapp"
+              className="mt-16 gap-4"
+            >
+              <Image
+                src="/whatsapp.svg"
+                alt="WhatsApp Logo"
+                width="20"
+                height="20"
+              />
               Entrar em contato
-            </button>
+            </Button>
           </div>
         </div>
       </main>
