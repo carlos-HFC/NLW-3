@@ -42,7 +42,7 @@ export function Card(props: Readonly<CardProps>) {
             ) : (
               <>
                 <Link
-                  href={""}
+                  href={`/dashboard/orphanage/${props.id}`}
                   className="size-12 rounded-2xl bg-gray-100 flex justify-center items-center"
                 >
                   <PenLineIcon className="size-6 stroke-blue-500" />
