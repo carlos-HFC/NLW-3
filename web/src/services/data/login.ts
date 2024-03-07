@@ -15,6 +15,8 @@ export async function handleLogin(data: FormData) {
     },
   });
 
+  if (!res.ok) return await res.json();
+
   const [cookie, ...rest] = res.headers.getSetCookie().toString().split(';');
   const [key, value] = cookie.split('=');
   const [, maxAge] = rest[0].split('=').map(Number);

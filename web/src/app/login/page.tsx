@@ -1,12 +1,24 @@
+"use client";
+
 import { ArrowLeftIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
 
 import { Button } from "@/components/button";
 import { FormControl } from "@/components/form-control";
+
 import { handleLogin } from "@/services/data/login";
 
 export default function Login() {
+  async function signIn(form: FormData) {
+    const response = await handleLogin(form);
+
+    if (response.statusCode === 400) {
+      return toast.error("Credenciais incorretas");
+    }
+  }
+
   return (
     <div className="h-dvh w-full flex bg-blue-gradient">
       <div className="flex-1 flex justify-center items-center flex-col">
@@ -32,10 +44,10 @@ export default function Login() {
         </Link>
 
         <form
-          className="px-20"
-          action={handleLogin}
+          className="px-20 space-y-6"
+          action={signIn}
         >
-          <h1 className="font-bold text-3xl text-teal-400 mb-10">Fazer login</h1>
+          <h1 className="font-bold text-3xl text-teal-400 mb-4">Fazer login</h1>
 
           <FormControl
             label="E-mail"
@@ -51,14 +63,14 @@ export default function Login() {
 
           <Link
             href="/"
-            className="mt-6 font-semibold text-gray-500 flex"
+            className="font-semibold text-gray-500 flex"
           >
             Esqueci minha senha
           </Link>
 
           <Button
             type="submit"
-            className="mt-11"
+            className="mt-5"
           >
             Entrar
           </Button>

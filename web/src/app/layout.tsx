@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
+import { Toaster } from "sonner";
 
 import { cn } from "@/utils";
 
@@ -24,6 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(nunito.className, "bg-gray-100 text-white h-screen")}>
+        <Toaster
+          richColors
+          theme="dark"
+        />
         {children}
       </body>
     </html>

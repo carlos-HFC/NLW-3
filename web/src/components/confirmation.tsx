@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { ReactNode, useEffect } from "react";
-
-import { cn } from "@/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+import { toast } from "sonner";
+
 import { deleteOrphanage } from "@/services/data/delete-orphanage";
+import { cn } from "@/utils";
 
 interface ConfirmationProps {
   title: string;
@@ -21,7 +22,7 @@ export function Confirmation(props: Readonly<ConfirmationProps>) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const closeConfirmation = (event: KeyboardEvent) => event.key === 'Escape' && router.replace(pathname);
+    const closeConfirmation = (event: KeyboardEvent) => (event.key === 'Escape' && props.variant === 'danger') && router.replace(pathname);
 
     document.addEventListener("keydown", closeConfirmation);
     return () => document.removeEventListener("keydown", closeConfirmation);
@@ -41,7 +42,7 @@ export function Confirmation(props: Readonly<ConfirmationProps>) {
     const response = await deleteOrphanage({ id });
 
     if (response?.statusCode === 404) {
-      alert("Erro inesperado");
+      return toast.error("Erro ao tentar excluir orfanato");
     }
 
     return router.replace(pathname);
@@ -75,7 +76,7 @@ export function Confirmation(props: Readonly<ConfirmationProps>) {
   return (
     <div
       className={cn(
-        "fixed inset-0",
+        "fixed inset-0 z-10",
         variant,
         !props.open && 'hidden'
       )}
