@@ -4,6 +4,7 @@ import { PlusIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { ZoomControl } from "pigeon-maps";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/button";
 import { Confirmation } from "@/components/confirmation";
@@ -35,6 +36,7 @@ export default function OrphanagesPage() {
   const [anchor, setAnchor] = useState(INITIAL_STATE_ANCHOR);
   const [data, setData] = useState(INITIAL_STATE_FORM);
   const [isSuccessRegister, setIsSuccessRegister] = useState(false);
+  const [whatsapp, setWhatsapp] = useState("");
 
   useEffect(() => {
     const html = document.querySelector("html");
@@ -54,7 +56,7 @@ export default function OrphanagesPage() {
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     setData(prev => {
       if (event.target.name === 'images') {
-        if (prev.images.length === 6) return prev;
+        if (prev.images.length === 5) return prev;
 
         return {
           ...prev,
@@ -84,11 +86,14 @@ export default function OrphanagesPage() {
   async function handleSubmit(form: FormData) {
     form.append("latitude", String(anchor.latitude));
     form.append("longitude", String(anchor.longitude));
+    form.set("whatsapp", `+55${whatsapp.replaceAll(/[\D]/g, '')}`);
 
     const response = await createOrphanage(form);
 
     if (response.statusCode === 400) {
-      return alert(JSON.stringify(response));
+      return toast.error("Erro ao criar orfanato", {
+        description: "Revise os campos e tente novamente"
+      });
     }
 
     setIsSuccessRegister(true);
@@ -109,15 +114,14 @@ export default function OrphanagesPage() {
           action={handleSubmit}
           className="w-[700px] my-16 mx-auto bg-white border border-gray-200 rounded-2xl py-16 px-20 overflow-hidden"
         >
-          <fieldset className="border-none">
-            <legend className="w-full text-3xl leading-8 text-teal-400 font-bold border-b border-gray-200 mb-10 pb-6">Dados</legend>
+          <fieldset className="border-none space-y-6">
+            <legend className="w-full text-3xl leading-8 text-teal-400 font-bold border-b border-gray-200 mb-4 pb-6">Dados</legend>
 
-            <div className="w-full h-[300px] border border-blue-200 rounded-2xl overflow-hidden relative">
+            <div className="w-full flex flex-col border bg-blue-50 border-blue-200 rounded-2xl overflow-hidden relative">
               <Map
-                height={300}
+                height={280}
                 zoom={15}
                 onClick={handleMapClick}
-                boxClassname="w-full flex"
               >
                 {anchor.latitude !== 0 && (
                   <Marker anchor={[anchor.latitude, anchor.longitude]} />
@@ -126,7 +130,7 @@ export default function OrphanagesPage() {
               </Map>
 
               {anchor.latitude === 0 && (
-                <footer className="py-3 px-0 text-center absolute bottom-0 left-0 bg-blue-50 w-full">
+                <footer className="py-3 px-0 text-center">
                   <p className="leading-6 text-munsell-500 no-underline font-bold">
                     Clique no mapa para adicionar a localização
                   </p>
@@ -145,6 +149,13 @@ export default function OrphanagesPage() {
               as="textarea"
               maxLength={300}
               helpText="Máximo de 300 caracteres"
+            />
+
+            <FormControl
+              label="Número de WhatsApp"
+              name="whatsapp"
+              value={whatsapp}
+              onChange={e => setWhatsapp(e.target.value.replace(/\D/g, "").replace(/(\d{2})(\d{5})(\d{4})\d?$/, "($1) $2-$3"))}
             />
 
             <div className="mt-6">
@@ -176,8 +187,7 @@ export default function OrphanagesPage() {
 
                 <label
                   htmlFor="images"
-                  className="w-full h-24 bg-gray-50 border border-dashed border-blue-300 rounded-2xl cursor-pointer flex justify-center items-center aria-disabled:opacity-50 aria-disabled:pointer-events-none"
-                  aria-disabled={data.images.length === 6}
+                  className={cn("w-full h-24 bg-gray-50 border border-dashed border-blue-300 rounded-2xl cursor-pointer justify-center items-center", data.images.length === 5 ? "hidden" : "flex")}
                 >
                   <PlusIcon className="size-6 stroke-blue-500" />
                 </label>
@@ -186,9 +196,8 @@ export default function OrphanagesPage() {
                   type="file"
                   name="images"
                   id="images"
-                  className="hidden"
                   multiple
-                  disabled={data.images.length === 6}
+                  hidden
                   accept="image/jpeg, image/png, image/webp"
                   onChange={handleChange}
                 />
@@ -196,8 +205,8 @@ export default function OrphanagesPage() {
             </div>
           </fieldset>
 
-          <fieldset className="border-none mt-20">
-            <legend className="w-full text-3xl leading-8 text-teal-400 font-bold border-b border-gray-200 mb-10 pb-6">Visitação</legend>
+          <fieldset className="border-none mt-20 space-y-6">
+            <legend className="w-full text-3xl leading-8 text-teal-400 font-bold border-b border-gray-200 mb-4 pb-6">Visitação</legend>
 
             <FormControl
               label="Instruções"
