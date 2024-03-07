@@ -9,6 +9,7 @@ import { Marker } from "@/components/marker";
 import { Sidebar } from "@/components/sidebar";
 
 import { api } from "@/services/api";
+import { getOrphanage } from "@/services/data/get-orphanage";
 
 interface PageProps {
   params: {
@@ -17,7 +18,7 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
-  const { data: { orphanage } } = await api.get<Orphanage, 'orphanage'>(`/orphanages/${params.id}`);
+  const { data: { orphanage } } = await getOrphanage(params.id);
 
   const images = (await parent).openGraph?.images ?? orphanage.images;
 
@@ -38,9 +39,7 @@ export async function generateStaticParams() {
 }
 
 export default async function OrphanagesDetailPage(props: PageProps) {
-  const response = await api.get<Orphanage, 'orphanage'>(`/orphanages/${props.params.id}`);
-
-  const { orphanage } = response.data;
+  const { data: { orphanage } } = await getOrphanage(props.params.id);
 
   return (
     <div className="flex min-h-dvh">

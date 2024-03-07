@@ -10,11 +10,11 @@ import { changeStatusOrphanage } from "@/services/data/change-status-orphanage";
 export function Actions() {
   const params = useParams() as { id: string; };
 
-  async function handleChangeStatus(status: "aproved" | "refused") {
+  async function handleChangeStatus(aproved: boolean) {
     await changeStatusOrphanage({
       id: params.id,
       body: JSON.stringify({
-        aproved: status === 'aproved'
+        aproved
       })
     });
   }
@@ -22,15 +22,17 @@ export function Actions() {
   return (
     <footer className="px-20 py-12 overflow-hidden bg-gray-50 flex items-center gap-5 justify-between border-t border-gray-200">
       <Button
+        type="button"
         variant="danger"
-        onClick={() => handleChangeStatus("refused")}
+        onClick={() => handleChangeStatus(false)}
       >
         <XCircleIcon />
         Recusar
       </Button>
       <Button
+        type="button"
         variant="success"
-        onClick={() => handleChangeStatus("aproved")}
+        onClick={() => handleChangeStatus(true)}
       >
         <CheckIcon />
         Aceitar
