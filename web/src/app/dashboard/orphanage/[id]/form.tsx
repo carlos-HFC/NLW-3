@@ -41,7 +41,6 @@ export function Form({ orphanage }: Readonly<FormProps>) {
   async function handleSubmit(form: FormData) {
     form.append("latitude", String(anchor.latitude));
     form.append("longitude", String(anchor.longitude));
-    form.delete("whatsapp");
     form.set("whatsapp", `+55${whatsapp.replaceAll(/[\D]/g, '')}`);
 
     await editOrphanage({
@@ -61,7 +60,7 @@ export function Form({ orphanage }: Readonly<FormProps>) {
       <fieldset className="border-none space-y-6">
         <legend className="w-full text-3xl leading-8 text-teal-400 font-bold border-b border-gray-200 mb-4 pb-6">Dados</legend>
 
-        <div className="mb-10 rounded-2xl border border-blue-200 bg-blue-50">
+        <div className="mb-10 rounded-2xl border border-blue-200 bg-blue-50 flex flex-col">
           <Map
             height={280}
             boxClassname="w-full"
@@ -167,8 +166,14 @@ export function Form({ orphanage }: Readonly<FormProps>) {
             Atende fim de semana
           </label>
 
-          <div className="grid grid-cols-2">
-            <div className={cn("h-16 flex justify-center items-center relative border cursor-pointer rounded-l-2xl", openOnWeekends === 'true' ? "bg-green-100 border-green-200 text-green-500" : "border-gray-200 bg-gray-50 text-teal-400 border-r-0")}>
+          <div
+            className="grid grid-cols-2 aria-readonly:*:pointer-events-none aria-readonly:*:cursor-auto"
+            aria-readonly={!IS_EDIT}
+          >
+            <div
+              aria-readonly={!IS_EDIT}
+              className={cn("h-16 flex justify-center items-center relative border cursor-pointer aria-readonly:*:pointer-events-none aria-readonly:*:cursor-auto rounded-l-2xl", openOnWeekends === 'true' ? "bg-green-100 border-green-200 text-green-500" : "border-gray-200 bg-gray-50 text-teal-400 border-r-0")}
+            >
               <input
                 type="radio"
                 name="openOnWeekends"
@@ -180,7 +185,10 @@ export function Form({ orphanage }: Readonly<FormProps>) {
               />
               Sim
             </div>
-            <div className={cn("h-16 flex justify-center items-center relative border cursor-pointer rounded-r-2xl", openOnWeekends === 'false' ? "bg-red-100 border-red-200 text-red-500" : "border-gray-200 bg-gray-50 text-teal-400 border-l-0")}>
+            <div
+              aria-readonly={!IS_EDIT}
+              className={cn("h-16 flex justify-center items-center relative border cursor-pointer aria-readonly:*:pointer-events-none aria-readonly:*:cursor-auto rounded-r-2xl", openOnWeekends === 'false' ? "bg-red-100 border-red-200 text-red-500" : "border-gray-200 bg-gray-50 text-teal-400 border-l-0")}
+            >
               <input
                 type="radio"
                 name="openOnWeekends"

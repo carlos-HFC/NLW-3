@@ -9,12 +9,9 @@ interface PageProps {
   params: {
     id: string;
   };
-  searchParams: {
-    edit?: string;
-  };
 }
 
-export default async function OrphanagesDetailPage({ params, searchParams }: PageProps) {
+export default async function OrphanagesDetailPage({ params }: PageProps) {
   const { data: { orphanage } } = await getOrphanage(params.id, {
     cache: "no-cache"
   });
