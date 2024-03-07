@@ -20,6 +20,19 @@ export function Confirmation(props: Readonly<ConfirmationProps>) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  useEffect(() => {
+    const closeConfirmation = (event: KeyboardEvent) => event.key === 'Escape' && router.replace(pathname);
+
+    document.addEventListener("keydown", closeConfirmation);
+    return () => document.removeEventListener("keydown", closeConfirmation);
+  });
+
+  useEffect(() => {
+    const html = document.querySelector("html");
+
+    html?.classList.toggle("overflow-hidden");
+  }, [props.open]);
+
   async function handleDelete() {
     const id = searchParams.get("id");
 
@@ -31,6 +44,10 @@ export function Confirmation(props: Readonly<ConfirmationProps>) {
       alert("Erro inesperado");
     }
 
+    return router.replace(pathname);
+  }
+
+  function cancelDelete() {
     return router.replace(pathname);
   }
 
@@ -55,12 +72,6 @@ export function Confirmation(props: Readonly<ConfirmationProps>) {
       break;
   }
 
-  useEffect(() => {
-    const html = document.querySelector("html");
-
-    html?.classList.toggle("overflow-hidden");
-  }, [props.open]);
-
   return (
     <div
       className={cn(
@@ -78,15 +89,26 @@ export function Confirmation(props: Readonly<ConfirmationProps>) {
             {props.description}
           </p>
 
-          <button
-            className={cn(
-              "h-16 flex items-center justify-center rounded-2xl mt-16 px-10 text-white w-max font-extrabold text-lg leading-6",
-              actionVariant
+          <div className="flex items-center justify-center gap-2">
+            <button
+              className={cn(
+                "h-16 flex items-center justify-center rounded-2xl mt-16 px-10 text-white w-max font-extrabold text-lg leading-6",
+                actionVariant
+              )}
+              onClick={onClick}
+            >
+              {props.btnText}
+            </button>
+
+            {props.variant === 'danger' && (
+              <button
+                className="h-16 flex items-center justify-center rounded-2xl mt-16 px-10 text-white w-max font-extrabold text-lg leading-6 bg-gray-800/60 hover:bg-gray-800/40"
+                onClick={cancelDelete}
+              >
+                Cancelar
+              </button>
             )}
-            onClick={onClick}
-          >
-            {props.btnText}
-          </button>
+          </div>
         </div>
 
         <Image
