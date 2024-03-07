@@ -37,16 +37,18 @@ export default async function MapPage() {
         </footer>
       </aside>
 
-      <Map>
-        {response.data.orphanages.map(item => (
-          <Marker
-            key={item.id}
-            payload={item.name}
-            href={`/orphanages/${item.id}`}
-            anchor={[Number(item.latitude), Number(item.longitude)]}
-          />
-        ))}
-      </Map>
+      <div className="flex flex-1 w-full">
+        <Map>
+          {response.data.orphanages.map(item => (
+            <Marker
+              key={item.id}
+              payload={item.name}
+              href={`/orphanages/${item.id}`}
+              anchor={[Number(item.latitude), Number(item.longitude)]}
+            />
+          ))}
+        </Map>
+      </div>
 
       <Link
         href="/orphanages"
