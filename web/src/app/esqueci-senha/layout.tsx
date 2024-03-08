@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { RestrictedLayout } from "@/components/restricted-layout";
 
 export const metadata: Metadata = {
-  title: "Fazer login"
+  title: "Esqueci a senha"
 };
 
 export default function Layout({
