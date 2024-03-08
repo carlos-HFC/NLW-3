@@ -7,6 +7,7 @@ export const THEME = {
     PRIMARY_200: "#B3DAE2",
     PRIMARY_50: "#E6F7FB",
 
+    RED_900: "#D6487B",
     RED_500: "#FF669D",
     RED_200: "#FFBCD4",
     RED_100: "#FEF6F9",
@@ -16,6 +17,7 @@ export const THEME = {
     GRAY_200: "#D3E2E5",
     GRAY_100: "#F9FAFC",
 
+    GREEN_900: "#19C06D",
     GREEN_600: "#3CDC8C",
     GREEN_500: "#37C77F",
     GREEN_400: "#39CC83",
