@@ -26,7 +26,7 @@ export function Button(props: Readonly<ButtonProps>) {
     <button
       {...props}
       className={cn(
-        "w-full h-16 border-none cursor-pointer rounded-2xl text-white text-lg font-bold flex justify-center items-center gap-4",
+        "w-full h-16 border-none cursor-pointer rounded-2xl text-white text-lg font-bold flex justify-center items-center gap-4 disabled:opacity-70 disabled:pointer-events-none",
         variant,
         props.className
       )}
