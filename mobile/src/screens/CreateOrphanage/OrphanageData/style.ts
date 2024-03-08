@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     marginTop: 16,
   },
   nextButton: {
-    backgroundColor: THEME.COLORS.PRIMARY_500,
+    backgroundColor: THEME.COLORS.GREEN_600,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
@@ -66,12 +66,38 @@ export const styles = StyleSheet.create({
     color: THEME.COLORS.WHITE,
   },
   uploadedImagesContainer: {
-    gap: 8
+    gap: 8,
+    width: "100%",
+    borderWidth: 1,
+    borderColor: THEME.COLORS.GRAY_300,
+    borderRadius: 20,
+    marginBottom: 8,
+    padding: 6,
+    paddingRight: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   uploadedImage: {
-    width: 64,
-    height: 64,
-    borderRadius: 20,
-    marginBottom: 32,
+    width: 60,
+    height: 60,
+    borderRadius: 16,
   },
+  uploadedImagesInfo: {
+    flexDirection: "row",
+    gap: 16,
+    alignItems: "center"
+  },
+  uploadedImagesInfoTitle: {
+    fontSize: THEME.SIZES.SM,
+    fontFamily: THEME.FONT_FAMILY.SEMI,
+    lineHeight: THEME.SIZES.SM * 1.5,
+    color: THEME.COLORS.GREEN_500
+  },
+  uploadedImagesInfoSize: {
+    fontSize: THEME.SIZES.XS,
+    fontFamily: THEME.FONT_FAMILY.SEMI,
+    lineHeight: THEME.SIZES.XS * 1.5,
+    color: THEME.COLORS.GRAY_500
+  }
 });

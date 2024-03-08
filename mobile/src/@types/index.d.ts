@@ -4,6 +4,7 @@ type Orphanage = {
   id: string;
   name: string;
   about: string;
+  whatsapp: string;
   instructions: string;
   openingHours: string;
   openOnWeekends: boolean;

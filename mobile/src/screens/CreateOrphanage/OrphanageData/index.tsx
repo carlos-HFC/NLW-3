@@ -1,22 +1,29 @@
 import { Feather } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { ScrollView, View, Switch, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
+
+import { Modal } from '@/components/Modal';
 
 import { api } from "@/services/api";
 import { THEME } from "@/styles/theme";
+import { convertFileSize } from "@/utils/convertFileSize";
 
 import { styles } from './style';
 
 const INITIAL_STATE_FORM = {
   name: "",
   about: "",
+  whatsapp: "",
   instructions: "",
   openingHours: "",
   openOnWeekends: true,
-  images: [] as ImagePicker.ImagePickerAsset[]
+  images: [] as Array<ImagePicker.ImagePickerAsset & {
+    filesize?: number;
+  }>
 };
 
 export function OrphanageData() {
@@ -79,12 +86,26 @@ export function OrphanageData() {
 
     const { assets } = result;
 
+    const images = assets.map((item, i) => ({
+      ...item,
+      fileName: `image_${String(data.images.length + i + 1).padStart(2, '0')}.${item.fileName.split('.')[1]}`
+    }));
+
     setData(prev => ({
       ...prev,
       images: [
         ...prev.images,
-        ...assets
+        ...images
       ]
+    }));
+  }
+
+  function handleRemoveImage(index: number) {
+    const newImages = data.images.filter((_, i) => i !== index);
+
+    setData(prev => ({
+      ...prev,
+      images: newImages
     }));
   }
 
@@ -110,29 +131,53 @@ export function OrphanageData() {
         onChangeText={about => setData(prev => ({ ...prev, about }))}
       />
 
-      {/* <Text style={styles.label}>Whatsapp</Text>
+      <Text style={styles.label}>Whatsapp</Text>
       <TextInput
+        keyboardType="numeric"
         style={styles.input}
-      /> */}
+        maxLength={15}
+        value={data.whatsapp.replace(/(\d{2})(\d{5})(\d{4})\d?$/, "($1) $2-$3")}
+        onChangeText={whatsapp => setData(prev => ({ ...prev, whatsapp }))}
+      />
 
       <Text style={styles.label}>Fotos</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.uploadedImagesContainer}
-      >
-        {data.images?.map(item => (
-          <Image
-            key={item.uri}
-            source={{ uri: item.uri }}
-            style={styles.uploadedImage}
-          />
-        ))}
-      </ScrollView>
+      {data.images?.map((item, i) => (
+        <LinearGradient
+          key={i}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          colors={[THEME.COLORS.GREEN_100, THEME.COLORS.RED_100]}
+          style={styles.uploadedImagesContainer}
+        >
+          <View style={styles.uploadedImagesInfo}>
+            <Image
+              source={{ uri: item?.uri }}
+              style={styles.uploadedImage}
+            />
+
+            <View>
+              <Text style={styles.uploadedImagesInfoTitle}>
+                {item?.fileName}
+              </Text>
+              <Text style={styles.uploadedImagesInfoSize}>
+                {convertFileSize(item?.filesize)}
+              </Text>
+            </View>
+          </View>
+
+          <BorderlessButton onPress={() => handleRemoveImage(i)}>
+            <Feather
+              name="x"
+              color={THEME.COLORS.RED_500}
+              size={THEME.SIZES["2XL"]}
+            />
+          </BorderlessButton>
+        </LinearGradient>
+      ))}
       <TouchableOpacity
         style={styles.imagesInput}
         onPress={handleSelectImages}
-        disabled={data.images.length >= 6}
+        disabled={data.images.length === 5}
       >
         <Feather
           name="plus"
@@ -179,6 +224,8 @@ export function OrphanageData() {
           Cadastrar
         </Text>
       </RectButton>
+
+      <Modal />
     </ScrollView>
   );
 }
