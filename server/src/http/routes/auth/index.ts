@@ -6,6 +6,8 @@ import { User } from "@/domain/entities/user";
 import { env } from "@/env/env";
 import { bcryptHasher } from "@/http/helpers/bcrypt-hasher";
 import { randomString } from "@/http/helpers/random-string";
+import { ResetPassword } from "@/http/mail/reset-password";
+import { from, resend } from "@/lib/mailer";
 import { prisma } from "@/lib/prisma";
 
 export async function authRoutes(fastify: FastifyInstance) {
@@ -59,7 +61,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
     }
 
-    const tokenResetPassword = randomString({ size: 100, encoding: 'base64' });
+    const tokenResetPassword = randomString(100);
 
     await prisma.user.update({
       where: {
@@ -72,12 +74,15 @@ export async function authRoutes(fastify: FastifyInstance) {
 
     const link = `${env.RESET_PASSWORD_URL}?email=${email}&token=${tokenResetPassword}`;
 
-    // await resend.emails.send({
-    //   from,
-    //   to: email,
-    //   subject: "Alteração de senha",
-    //   react: ResetPassword({ link, name })
-    // });
+    await resend.emails.send({
+      from,
+      to: email,
+      subject: "Alteração de senha",
+      react: ResetPassword({
+        link,
+        name: user.name
+      })
+    });
 
     reply.code(200).send({
       link,
