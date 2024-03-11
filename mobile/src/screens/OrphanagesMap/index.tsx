@@ -1,6 +1,7 @@
-import { Feather } from '@expo/vector-icons';
+import { Entypo, Feather } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useCallback, useState } from "react";
+import * as Location from 'expo-location';
+import { useCallback, useEffect, useState } from "react";
 import { Text, View } from 'react-native';
 import { RectButton } from "react-native-gesture-handler";
 import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -15,8 +16,31 @@ import { styles } from "./style";
 
 export function OrphanagesMap() {
   const [orphanages, setOrphanages] = useState<Orphanage[]>([]);
+  const [location, setLocation] = useState(DEFAULT_POSITION);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    async function loadPosition() {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== 'granted') {
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync();
+
+      const { latitude, longitude } = location.coords;
+
+      setLocation(prev => ({
+        ...prev,
+        latitude,
+        longitude
+      }));
+    }
+
+    loadPosition();
+  }, []);
 
   useFocusEffect(useCallback(() => {
     api.get("/orphanages")
@@ -37,8 +61,18 @@ export function OrphanagesMap() {
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         zoomControlEnabled
-        initialRegion={DEFAULT_POSITION}
+        rotateEnabled={false}
+        initialRegion={location}
       >
+        <Marker coordinate={location}>
+          <View>
+            <Entypo
+              name="location-pin"
+              size={48}
+              color={THEME.COLORS.PRIMARY_400}
+            />
+          </View>
+        </Marker>
         {orphanages.map(item => (
           <Marker
             key={item.id}
