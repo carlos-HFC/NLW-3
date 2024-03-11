@@ -10,6 +10,7 @@ import { Sidebar } from "@/components/sidebar";
 
 import { api } from "@/services/api";
 import { getOrphanage } from "@/services/data/get-orphanage";
+import { ContactButton } from "./contact-button";
 
 interface PageProps {
   params: {
@@ -110,18 +111,7 @@ export default async function OrphanagesDetailPage(props: PageProps) {
               }
             </div>
 
-            <Button
-              variant="whatsapp"
-              className="mt-16 gap-4"
-            >
-              <Image
-                src="/whatsapp.svg"
-                alt="WhatsApp Logo"
-                width="20"
-                height="20"
-              />
-              Entrar em contato
-            </Button>
+            <ContactButton whatsapp={orphanage.whatsapp} />
           </div>
         </div>
       </main>
