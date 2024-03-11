@@ -1,7 +1,10 @@
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import { Text, View } from "react-native";
 import { BorderlessButton } from "react-native-gesture-handler";
+
+import { Modal } from "../Modal";
 
 import { THEME } from "@/styles/theme";
 
@@ -15,7 +18,10 @@ interface HeaderProps {
 export function Header({ title, showCancel = true }: HeaderProps) {
   const navigation = useNavigation();
 
-  function handleGoToHomeScreen() {
+  const [confirmNavigation, setConfirmNavigation] = useState(false);
+
+  function handleConfirmNavigationToHomeScreen() {
+    setConfirmNavigation(false);
     navigation.navigate("orphanages-map");
   }
 
@@ -35,7 +41,7 @@ export function Header({ title, showCancel = true }: HeaderProps) {
 
       {showCancel
         ? (
-          <BorderlessButton onPress={handleGoToHomeScreen}>
+          <BorderlessButton onPress={() => setConfirmNavigation(true)}>
             <Feather
               name="x"
               size={THEME.SIZES["2XL"]}
@@ -45,6 +51,13 @@ export function Header({ title, showCancel = true }: HeaderProps) {
         ) : (
           <View style={{ width: THEME.SIZES["2XL"] }} />
         )}
+
+      <Modal
+        visible={confirmNavigation}
+        variant="danger"
+        onConfirm={handleConfirmNavigationToHomeScreen}
+        onRequestClose={() => setConfirmNavigation(false)}
+      />
     </View>
   );
 }

@@ -1,5 +1,4 @@
 import { Feather } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { Image, Modal as ModalContainer, ModalProps as MProps, Text, TouchableOpacity, View } from "react-native";
 
@@ -10,6 +9,7 @@ import { styles } from "./style";
 
 interface ModalProps extends MProps {
   variant?: "success" | "danger";
+  onConfirm?(): void;
 }
 
 function selectVariant(variant?: ModalProps['variant']) {
@@ -43,8 +43,6 @@ function selectVariant(variant?: ModalProps['variant']) {
 }
 
 export function Modal(props: ModalProps) {
-  const navigation = useNavigation();
-
   const variant = selectVariant(props.variant);
 
   return (
@@ -63,7 +61,7 @@ export function Modal(props: ModalProps) {
             <TouchableOpacity
               activeOpacity={.5}
               style={[styles.button, styles.cancel]}
-              onPress={() => props.onRequestClose}
+              onPress={props.onRequestClose}
             >
               <Text style={styles.buttonText}>
                 Não
@@ -73,7 +71,7 @@ export function Modal(props: ModalProps) {
           <TouchableOpacity
             activeOpacity={.5}
             style={[styles.button, variant.buttonStyle]}
-            onPress={() => navigation.navigate("orphanages-map")}
+            onPress={props.onConfirm}
           >
             <Text style={styles.buttonText}>
               {variant.buttonText}
