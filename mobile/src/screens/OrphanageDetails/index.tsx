@@ -5,6 +5,7 @@ import { Image, View, ScrollView, Text, TouchableOpacity, Linking } from 'react-
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { RectButton } from 'react-native-gesture-handler';
 
+import { Loading } from "@/components/Loading";
 import { ScheduleItem } from "@/components/ScheduleItem";
 
 import { DEFAULT_POSITION } from "@/constants";
@@ -28,14 +29,16 @@ export function OrphanageDetails() {
 
   if (!orphanage) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.description}>Carregando...</Text>
-      </View>
+      <Loading />
     );
   }
 
   function handleOpenGoogleMaps() {
     Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${orphanage.latitude},${orphanage.longitude}`);
+  }
+
+  function handleOpenWhatsapp() {
+    Linking.openURL(`whatsapp://send?phone=${orphanage.whatsapp}`);
   }
 
   return (
@@ -44,6 +47,7 @@ export function OrphanageDetails() {
         <ScrollView
           horizontal
           pagingEnabled
+          showsHorizontalScrollIndicator={false}
         >
           {orphanage.images.map(item => (
             <Image
@@ -115,7 +119,7 @@ export function OrphanageDetails() {
 
         <RectButton
           style={styles.contactButton}
-          onPress={void 0}
+          onPress={handleOpenWhatsapp}
         >
           <FontAwesome
             name="whatsapp"
