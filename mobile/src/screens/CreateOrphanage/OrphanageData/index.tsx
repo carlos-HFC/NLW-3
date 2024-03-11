@@ -31,6 +31,7 @@ export function OrphanageData() {
   const navigation = useNavigation();
 
   const [data, setData] = useState(INITIAL_STATE_FORM);
+  const [isRegisterSuccess, setIsRegisterSuccess] = useState(false);
 
   const { position } = route.params as ReactNavigation.RootParamList['orphanage-data'];
 
@@ -63,7 +64,7 @@ export function OrphanageData() {
         }
       });
 
-      navigation.navigate("orphanages-map");
+      setIsRegisterSuccess(true);
     } catch (error) {
       Alert.alert("Oopss...!", "Houve um erro ao cadastrar o orfanato");
     }
@@ -225,7 +226,10 @@ export function OrphanageData() {
         </Text>
       </RectButton>
 
-      <Modal />
+      <Modal
+        visible={isRegisterSuccess}
+        onConfirm={() => navigation.navigate('orphanages-map')}
+      />
     </ScrollView>
   );
 }
